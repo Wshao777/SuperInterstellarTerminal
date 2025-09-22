@@ -2,9 +2,17 @@ from flask import Flask, request, jsonify
 import json
 # from collections import deque
 import time
-from ImgGenerateModule import imgGenerator
+from ImgGenerateModule import ImgGenerator
 import CVTools
 import cv2
+
+imgGenerator = ImgGenerator(debug=False,
+                   ymlPathSeg='PetModel/mscale_ocr_cityscapes_autolabel_mapillary_ms_val.yml',
+                   modelPathSeg='PetModel/modelCityscape.pdparams',
+                   modelPathSand='msgnet',
+                   picPathHead='HeadPic/',
+                   picPathPet='PetPic/',
+                   picPathVeg='VegPic')
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 app.config['JSONIFY_MIMETYPE'] = "application/json;charset=utf-8"
@@ -79,4 +87,6 @@ def users():
     return jsonify(rp)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8001, debug=True)  # 启动app的调试模式
+    from gevent import pywsgi
+    server = pywsgi.WSGIServer(('0.0.0.0', 8001), app)
+    server.serve_forever()
