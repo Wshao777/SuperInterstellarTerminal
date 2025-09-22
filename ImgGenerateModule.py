@@ -69,7 +69,7 @@ class ImgGenerator():
             self.vegetation = vegetateTransClass(picPath=picPathVeg)
             print('self.vegetation sucess:',self.vegetation)
             self.sander = sandClass(stylePath=os.path.join(picPathVeg,'sand.jpg'),modelPath=modelPathSand)
-            
+
             print('self.sander sucess:',self.sander)
         except Exception as e:
             print(e)
@@ -150,7 +150,7 @@ class ImgGenerator():
         else:
             print('ImgGenerator:last process not sucess')
             return dst, dst, rc
-    # 
+    #
     def alienHeadProcess(self, alienHeadIndex, dst):
         img = dst
         dic = {}
@@ -216,18 +216,15 @@ class ImgGenerator():
             print('行号', e.__traceback__.tb_lineno)
             return self.resultCode[0], [], []
 
-imgGenerator = ImgGenerator(debug=False,
-                   ymlPathSeg='PetModel/mscale_ocr_cityscapes_autolabel_mapillary_ms_val.yml',
-                   modelPathSeg='PetModel/modelCityscape.pdparams',
-                   modelPathSand='msgnet',
-                   picPathHead='HeadPic/',
-                   picPathPet='PetPic/',
-                   picPathVeg='VegPic')
-
-
 if __name__ == '__main__':
 
-
+    imgGenerator = ImgGenerator(debug=False,
+                       ymlPathSeg='PetModel/mscale_ocr_cityscapes_autolabel_mapillary_ms_val.yml',
+                       modelPathSeg='PetModel/modelCityscape.pdparams',
+                       modelPathSand='msgnet',
+                       picPathHead='HeadPic/',
+                       picPathPet='PetPic/',
+                       picPathVeg='VegPic')
     dstPath = 'testpic/jiayuting.jpg'
     dstPath = 'test/input.jpg'
 
