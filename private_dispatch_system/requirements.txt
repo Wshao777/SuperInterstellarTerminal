@@ -1,0 +1,10 @@
+# FastAPI and Server
+fastapi
+uvicorn[standard]
+
+# Google Sheets Integration
+gspread
+oauth2client
+
+# Data Validation
+pydantic
