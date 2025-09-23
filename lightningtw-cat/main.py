@@ -80,10 +80,46 @@ def generate_report():
 
 
 def check_cash_flow():
-    """Placeholder function for checking cash flow."""
+    """
+    Reads transaction data, flags suspicious activities, and sends an alert.
+    """
     print("💰 正在檢查金流...")
-    # TODO: Add logic to monitor payments and detect anomalies.
-    print("✅ 金流檢查完成，無異常。")
+    try:
+        df = pd.read_csv('transactions.csv')
+
+        # --- Anomaly Detection Rules ---
+        # Rule 1: Flag transactions with failed status
+        failed_txns = df[df['status'] == 'failed']
+
+        # Rule 2: Flag unusually large transactions
+        large_txns = df[df['amount'] > 100000]
+
+        # Combine suspicious transactions and remove duplicates
+        suspicious_txns = pd.concat([failed_txns, large_txns]).drop_duplicates()
+
+        if suspicious_txns.empty:
+            alert_message = "✅ **金流檢查完畢**\n\n所有交易紀錄正常，無發現異常。"
+            print("✅ 金流檢查完成，無異常。")
+        else:
+            alert_message = f"🚨 **緊急金流警報** 🚨\n\n偵測到 {len(suspicious_txns)} 筆可疑交易！\n\n"
+            for index, row in suspicious_txns.iterrows():
+                alert_message += f"- **ID**: `{row['transaction_id']}`, **金額**: `${row['amount']:,.2f}`, **狀態**: `{row['status']}`\n"
+            alert_message += "\n請總司令立即審查！"
+            print(alert_message)
+
+        # Send alert to Telegram via Command Bot
+        token = os.getenv("COMMAND_BOT_TOKEN")
+        chat_id = os.getenv("TELEGRAM_CHAT_ID")
+        bot = telegram.Bot(token=token)
+        bot.send_message(chat_id=chat_id, text=alert_message, parse_mode='Markdown')
+
+        print(f"✅ 金流檢查報告已發送至 Telegram。")
+
+    except FileNotFoundError:
+        print("❌ 錯誤：找不到 `transactions.csv` 檔案。")
+    except Exception as e:
+        print(f"❌ 檢查金流時發生未知錯誤：{e}")
+
 
 def simulate_strategy():
     """Placeholder function for simulating strategies."""
@@ -138,7 +174,7 @@ def main():
     parser = argparse.ArgumentParser(description="小閃電貓⚡ AI 雷霆助理")
     parser.add_argument("--派單", action="store_true", help="從平台 API 拉取新訂單並準備派送")
     parser.add_argument("--報表", action="store_true", help="生成每日戰報並發送 Telegram")
-    parser.add_argument("--金流檢查", action="store_true", help="監控金流異常 (尚未實現)")
+    parser.add_argument("--金流檢查", action="store_true", help="掃描交易紀錄並對異常金流發出警報")
     parser.add_argument("--策略模擬", action="store_true", help="模擬不同派單策略 (尚未實現)")
     parser.add_argument("--反釣魚掃描", action="store_true", help="啟動 AI 模型掃描可疑連結")
 
