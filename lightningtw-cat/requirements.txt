@@ -19,3 +19,8 @@ pytorch-lightning
 
 # For Webhook Server (optional)
 Flask
+
+# For API Server
+fastapi
+uvicorn[standard]
+pydantic

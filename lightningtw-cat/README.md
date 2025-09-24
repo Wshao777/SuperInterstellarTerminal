@@ -119,38 +119,32 @@ v        v       v
 ## 5️⃣ 使用方式 / Quick Start
 
 ### 安裝與設定
-1. 複製 repo 到本地或伺服器：
-   ```bash
-   git clone https://github.com/yourusername/lightningtw-cat.git
-   cd lightningtw-cat
-   ```
+1.  **複製 repo**：
+    ```bash
+    git clone https://github.com/yourusername/lightningtw-cat.git
+    cd lightningtw-cat
+    ```
+2.  **安裝依賴**：
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  **設定 `.env` 檔案**：
+    - 複製 `.env.example` 為 `.env`。
+    - 填寫所有必要的 token 和 ID。
 
-2. 安裝依賴：
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. 設定 .env：
-   ```
-   TELEGRAM_TOKEN=你的TelegramBotToken
-   TELEGRAM_CHAT=你的TelegramChatID
-   API_KEY=外送平台APIKey
-   ```
-
-4. 啟動主程式：
-   ```bash
-   python main.py
-   ```
-
-### 快速操作指令
+### 啟動 API 伺服器
+本專案已升級為 FastAPI 網路伺服器。請使用 `uvicorn` 來啟動：
 ```bash
-python main.py --派單          # 從平台 API 拉取新訂單並準備派送
-python main.py --報表          # 生成報表並發送 Telegram
-python main.py --金流檢查      # 監控金流異常
-python main.py --策略模擬      # 模擬不同派單策略並輸出結果
+uvicorn server:app --reload
 ```
+- 伺服器啟動後，您可以在 `http://127.0.0.1:8000/docs` 找到完整的 API 文件與互動式測試介面。
 
-> **Note:** The `--報表` command uses a `dummy_orders.csv` file for demonstration purposes. You can replace this file with your own data source.
+### 主要 API 端點
+- `GET /`: 檢查 API 是否在線。
+- `POST /api/dispatch`: 觸發派單流程，從平台拉取新訂單。
+- `POST /api/report`: 產生每日戰報並發送到 Telegram。
+- `POST /api/check-cash-flow`: 執行金流檢查與回報模擬。
+- `POST /api/scan-phishing`: 掃描指定的 URL 以檢測釣魚風險。
 
 ---
 
@@ -202,18 +196,4 @@ python main.py --策略模擬      # 模擬不同派單策略並輸出結果
 | 🛡️ | 安全 / 防禦 |
 | 📊 | 報表 / 分析 |
 | 💎 | 高 ROI / 精準策略 |
-| 🛡️ | 安全 / 防禦 |
 | 🔥 | 作戰 / 反擊工具 |
-
----
-
-## 11. 備註：反擊工具 / Note: Counter-Attack Tools
-
-在專案根目錄下，你會找到一個名為 `repo_scanner.py` 的獨立工具。
-
-- **用途**：此工具用於掃描你的程式碼庫，尋找潛在的後門或惡意程式碼。
-- **使用方式**：
-  ```bash
-  python ../repo_scanner.py /path/to/your/repo
-  ```
-這是在「救火」階段，為保護你的資產而打造的第一件武器。
