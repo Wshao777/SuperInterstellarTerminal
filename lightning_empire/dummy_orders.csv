@@ -1,0 +1,7 @@
+order_id,customer_name,revenue,status
+101,Mr. Chen,350,completed
+102,Ms. Lin,220,completed
+103,Mr. Wu,180,completed
+104,Ms. Tsai,550,completed
+105,Mr. Huang,300,cancelled
+106,Mr. Cheng,420,completed
